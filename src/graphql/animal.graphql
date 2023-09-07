@@ -1,0 +1,42 @@
+scalar Date
+
+type Animal {
+  _id: String
+  desertionNo: String
+  noticeNo: String
+  happenDt: Date
+  happenPlace: String
+  kindCd: String
+  kindCdDetail: String
+  colorCd: String
+  age: Int
+  weight: String
+  noticeStartDate: Date
+  noticeEndDate: Date
+  fileName: String
+  popFile: String
+  processState: String
+  processStateReason: String
+  sex: String
+  neuter: String
+  specialText: String
+  careName: String
+  officeTel: String
+  careTel: String
+  careAddress: String
+  orgNm: String
+  chargeNm: String
+  created_at: Date
+  updated_at: Date
+}
+
+type Org {
+  _id: String
+  org: [String]
+}
+
+type Query {
+  getAnimals: [Animal]
+  animal(id: String): Animal
+  org(orgFirst: String): [Org]
+}

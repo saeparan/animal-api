@@ -1,4 +1,4 @@
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql';
+import { Args, ArgsType, Field, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AnimalService } from './animal.service';
 
 @ArgsType()
@@ -26,6 +26,12 @@ export class AnimalResolver {
   @Query()
   async animal(@Args() args: getIdArgs) {
     const data = await this.animalService.getAnimal(args.id);
+    return data;
+  }
+
+  @Mutation()
+  async hitAnimal(@Args() args: getIdArgs) {
+    const data = await this.animalService.setHitAnimal(args.id);
     return data;
   }
 }

@@ -44,7 +44,24 @@ export class AnimalService {
   private readonly logger = new Logger(AnimalService.name);
 
   async getAnimals() {
-    return await this.animalModel.find().limit(10).sort({ _id: -1 });
+    const data = await this.animalModel
+      .find({
+        // kindCd: '고양이',
+        processState: '보호중',
+        happenDt: {
+          $gte: dayjs('2024-03-21'),
+          $lte: dayjs('2024-03-21'),
+        },
+        // noticeEndDate: {
+        //   $gte: dayjs('2024-03-10').toDate(),
+        // },
+      })
+      .sort({ desertionNo: 1, happenDt: 1 });
+    console.log(data.length);
+    // const randedData = data.slice().sort(() => 0.5 - Math.random());
+    // .slice(0, 100);
+
+    return data;
   }
 
   async getAnimal(id: string) {
@@ -55,5 +72,9 @@ export class AnimalService {
     return (await this.orgModel.find({ 'org.0': orgFirst }).sort({ 'org.1': 1 })).map((row) => {
       return { ...row, ...{ org: row.org.slice(1) } };
     });
+  }
+
+  async setHitAnimal(id: string) {
+    return await this.animalModel.findOneAndUpdate({ _id: id }, { $inc: { hit: 1 } }, { new: true });
   }
 }

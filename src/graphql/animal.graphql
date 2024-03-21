@@ -40,3 +40,7 @@ type Query {
   animal(id: String): Animal
   org(orgFirst: String): [Org]
 }
+
+type Mutation {
+  hitAnimal(id: String): [Animal]
+}

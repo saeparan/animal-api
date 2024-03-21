@@ -21,7 +21,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       playground: true,
       typePaths: ['./**/*.graphql'],
     }),
-    MongooseModule.forRoot('mongodb://localhost/animal'),
+    MongooseModule.forRoot(
+      'mongodb+srv://se7enmail:xKV5A3xsMLZKZ030@cluster0.ldghc6a.mongodb.net/animal?retryWrites=true&w=majority',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

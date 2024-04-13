@@ -9,4 +9,9 @@ export class AnimalController {
   async findAll(): Promise<any> {
     // return await this.batchService.createAnimalPeriod();
   }
+
+  @Get('shelters')
+  async getShelters(): Promise<any> {
+    return await this.animalService.getShelters();
+  }
 }

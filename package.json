@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.9.2",
+    "@jimp/types": "^0.22.12",
     "@nestjs/apollo": "^12.0.7",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
@@ -32,9 +33,11 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "graphql": "^16.8.0",
+    "jimp": "^0.22.12",
     "mongoose": "^7.4.4",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "timeago.js": "^4.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

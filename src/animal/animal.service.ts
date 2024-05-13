@@ -142,14 +142,22 @@ export class AnimalService {
     if (!date) {
       date = dayjs().format('YYYY-MM-DD');
     }
+    const dateArray = date.split(',');
+    const happenDt =
+      dateArray.length === 1
+        ? {
+            $eq: dayjs(date).toDate(),
+          }
+        : {
+            $gte: dayjs(date[0]).toDate(),
+            $lte: dayjs(date[1]).toDate(),
+          };
     const data = await this.animalModel
       .find({
         // kindCd: '고양이',
         processState: '보호중',
         // processStateReason: '입양',
-        happenDt: {
-          $eq: dayjs(date).toDate(),
-        },
+        happenDt: happenDt,
         // kindCd: { $not: { $eq: '개' } },
         kindCd: type ? { $in: type?.replaceAll(' ', '').split(',') } : { $not: { $eq: '개' } },
         // noticeEndDate: {

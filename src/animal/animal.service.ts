@@ -174,6 +174,16 @@ export class AnimalService {
     return data;
   }
 
+  async getLatestAnimals(limit: number = 5) {
+    return await this.animalModel
+      .find({
+        processState: '보호중',
+      })
+      .select({ _id: 1, popFile: 1, fileName: 1 })
+      .limit(limit)
+      .sort({ _id: -1 });
+  }
+
   async getShelters() {
     const rows = await this.shelterModel.find();
     const data = rows.map((r) => {

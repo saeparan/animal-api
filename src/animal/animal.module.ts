@@ -7,6 +7,7 @@ import { AnimalSchema } from '../schemas/animal.schema';
 import { OrgSchema } from '../schemas/org.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ShelterSchema } from 'src/schemas/shelter.schema';
+import { PrismaService } from 'src/prisma.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { ShelterSchema } from 'src/schemas/shelter.schema';
     HttpModule,
   ],
   controllers: [AnimalController],
-  providers: [AnimalService, AnimalResolver, OrgResolver],
+  providers: [PrismaService, AnimalService, AnimalResolver, OrgResolver],
 })
 export class AnimalModule {}

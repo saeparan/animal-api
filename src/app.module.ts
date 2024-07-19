@@ -6,9 +6,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { HttpModule } from '@nestjs/axios';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register({ isGlobal: true }),
     AnimalModule,
     HttpModule,
     // GraphQLModule.forRoot({

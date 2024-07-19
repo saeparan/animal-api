@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model AnimalType {
+  parerntName String? @db.VarChar(10)
+  kindCd      String? @db.VarChar(20)
+  name        String? @db.VarChar(20)
+
+  @@index([parerntName], map: "AnimalType_parerntName_index")
+  @@ignore
+}
+
+model Region {
+  id        Int     @id @default(autoincrement())
+  orgCd     String? @db.VarChar(20)
+  uprCd     String? @db.VarChar(20)
+  orgdownNm String? @db.VarChar(100)
+}

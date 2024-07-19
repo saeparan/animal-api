@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Animal } from '../schemas/animal.schema';
@@ -8,6 +8,10 @@ import Jimp from 'jimp';
 import * as dayjs from 'dayjs';
 import axios from 'axios';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 export type IAnimals = IAnimal[];
 export interface IAnimal {
@@ -38,9 +42,11 @@ export interface IAnimal {
 @Injectable()
 export class AnimalService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectModel(Animal.name) private readonly animalModel: Model<Animal>,
     @InjectModel(Org.name) private readonly orgModel: Model<Org>,
     @InjectModel(Shelter.name) private readonly shelterModel: Model<Shelter>,
+    private prisma: PrismaService,
   ) {}
   private readonly logger = new Logger(AnimalService.name);
 
@@ -165,13 +171,32 @@ export class AnimalService {
         // },
       })
       .sort({ happenDt: 1, careAddress: 1, desertionNo: 1 });
-
-    // const randedData = data.slice().sort(() => 0.5 - Math.random());
-    // .slice(0, 100);
-
-    console.log(data.length);
-
     return data;
+  }
+
+  async getServiceAnimals(query: any) {
+    const filter: { [key: string]: any } = {};
+    if (query.animalType1 === '개' || query.animalType1 === '고양이' || query.animalType1 === '기타') {
+      filter.kindCd = query.animalType1 === '기타' ? '기타축종' : query.animalType1;
+    }
+    if (query.region1) {
+      filter.orgNm = { $in: [query.region1] };
+    }
+
+    return {
+      rows: await this.animalModel
+        .find(filter)
+        .skip((query.page - 1) * 12)
+        .limit(12)
+        .sort({ _id: -1 }),
+      page: Number(query.page),
+    };
+  }
+
+  async getServiceAnimal(id: string) {
+    return await this.animalModel.findOne({
+      _id: id,
+    });
   }
 
   async getLatestAnimals(limit: number = 5) {
@@ -228,5 +253,24 @@ export class AnimalService {
     } catch (error) {
       console.error('Error downloading image:', error);
     }
+  }
+
+  async getFirstRegions() {
+    let data = await this.cacheManager.get('region-first');
+    if (data === undefined) {
+      data = await this.prisma.region.findMany({
+        select: {
+          orgCd: true,
+          orgdownNm: true,
+        },
+        where: {
+          uprCd: null,
+        },
+      });
+
+      await this.cacheManager.set('region-first', data, 0);
+    }
+
+    return data;
   }
 }

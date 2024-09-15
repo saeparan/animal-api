@@ -144,33 +144,24 @@ export class AnimalService {
     }
   }
 
-  async getAnimals(date: string, type: string) {
-    if (!date) {
-      date = dayjs().format('YYYY-MM-DD');
-    }
-    const dateArray = date.split(',');
-    const happenDt =
-      dateArray.length === 1
-        ? {
-            $eq: dayjs(date).toDate(),
-          }
-        : {
-            $gte: dayjs(date[0]).toDate(),
-            $lte: dayjs(date[1]).toDate(),
-          };
+  async getAnimals(query: any) {
+    const { startDate, endDate, type, orgs } = query;
     const data = await this.animalModel
       .find({
         // kindCd: '고양이',
         processState: '보호중',
         // processStateReason: '입양',
-        happenDt: happenDt,
-        // kindCd: { $not: { $eq: '개' } },
-        kindCd: type ? { $in: type?.replaceAll(' ', '').split(',') } : { $not: { $eq: '개' } },
+        happenDt: {
+          $gte: dayjs(startDate).toDate(),
+          $lte: dayjs(`${endDate}T23:59:59`).toDate(),
+        },
+        // kindCd: type ? { $in: type?.replaceAll(' ', '').split(',') } : { $not: { $eq: '개' } },
+        orgNm: orgs ? { $in: orgs?.replaceAll(' ', '').split(',') } : {},
         // noticeEndDate: {
         //   $gte: dayjs('2024-03-10').toDate(),
         // },
       })
-      .sort({ happenDt: 1, careAddress: 1, desertionNo: 1 });
+      .sort({ noticeStartDate: 1 });
     return data;
   }
 

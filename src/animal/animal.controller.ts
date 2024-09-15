@@ -8,7 +8,7 @@ export class AnimalController {
 
   @Get()
   async findAll(@Query() query): Promise<any> {
-    return await this.animalService.getAnimals(query.date, query.type);
+    return await this.animalService.getAnimals(query);
   }
 
   @Get('service')

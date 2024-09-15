@@ -19,7 +19,7 @@ export class AnimalResolver {
 
   @Query()
   async getAnimals() {
-    const data = await this.animalService.getAnimals(undefined, undefined);
+    const data = await this.animalService.getAnimals(undefined);
     return data;
   }
 

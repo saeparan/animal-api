@@ -28,20 +28,4 @@ export class AnimalResolver {
     const data = await this.animalService.getAnimal(args.id);
     return data;
   }
-
-  @Mutation()
-  async hitAnimal(@Args() args: getIdArgs) {
-    const data = await this.animalService.setHitAnimal(args.id);
-    return data;
-  }
-}
-
-@Resolver('Org')
-export class OrgResolver {
-  constructor(private readonly animalService: AnimalService) {}
-
-  @Query()
-  async org(@Args() args: GetOrgArgs) {
-    return await this.animalService.getDetailOrg(args.orgFirst);
-  }
 }

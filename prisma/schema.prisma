@@ -23,3 +23,37 @@ model Region {
   uprCd     String? @db.VarChar(20)
   orgdownNm String? @db.VarChar(100)
 }
+
+model Animals {
+  id                 String    @id @map("_id") @db.VarChar(100)
+  age                Int?
+  careAddress        String?   @db.Text
+  careName           String?   @db.VarChar(100)
+  careTel            String?   @db.VarChar(20)
+  chargeNm           String?   @db.VarChar(50)
+  colorCd            String?   @db.VarChar(100)
+  desertionNo        BigInt?
+  fileName           String?   @db.VarChar(255)
+  happenDt           DateTime? @db.Timestamp(0)
+  happenPlace        String?   @db.VarChar(255)
+  kindCd             String?   @db.VarChar(20)
+  kindCdDetail       String?   @db.VarChar(50)
+  neuter             String?   @db.VarChar(5)
+  noticeEndDate      DateTime? @db.Timestamp(0)
+  noticeNo           String?   @db.VarChar(50)
+  noticeStartDate    DateTime? @db.Timestamp(0)
+  officeTel          String?   @db.VarChar(20)
+  orgNm              String?   @db.VarChar(100)
+  popFile            String?   @db.VarChar(255)
+  processState       String?   @db.VarChar(20)
+  processStateReason String?   @db.Text
+  sex                String?   @db.Char(1)
+  specialText        String?   @db.Text
+  weight             String?   @db.VarChar(10)
+
+  @@index([desertionNo], map: "Animals_desertionNo_index")
+  @@index([happenDt], map: "Animals_happenDt_index")
+  @@index([desertionNo], map: "idx_desertionno")
+  @@index([noticeNo], map: "idx_noticeno")
+  @@index([processState], map: "idx_processstate")
+}

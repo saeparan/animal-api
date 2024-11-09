@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { AnimalController } from './animal.controller';
 import { AnimalService } from './animal.service';
-import { AnimalResolver, OrgResolver } from './animal.resolver';
+import { AnimalResolver } from './animal.resolver';
 import { Module } from '@nestjs/common';
 import { AnimalSchema } from '../schemas/animal.schema';
 import { OrgSchema } from '../schemas/org.schema';
@@ -19,6 +19,6 @@ import { PrismaService } from 'src/prisma.service';
     HttpModule,
   ],
   controllers: [AnimalController],
-  providers: [PrismaService, AnimalService, AnimalResolver, OrgResolver],
+  providers: [PrismaService, AnimalService, AnimalResolver],
 })
 export class AnimalModule {}

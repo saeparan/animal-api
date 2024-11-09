@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AnimalService } from './animal.service';
-import dayjs from 'dayjs';
 
 @Controller('animal')
 export class AnimalController {
@@ -32,18 +31,13 @@ export class AnimalController {
     return await this.animalService.realtime();
   }
 
-  @Get('save/image')
-  async saveImages(): Promise<any> {
-    return await this.animalService.saveAnimalImages();
-  }
+  // @Get('shelters')
+  // async getShelters(): Promise<any> {
+  //   return await this.animalService.getShelters();
+  // }
 
-  @Get('shelters')
-  async getShelters(): Promise<any> {
-    return await this.animalService.getShelters();
-  }
-
-  @Get('region/1')
-  async getFirstRegion(): Promise<any> {
-    return await this.animalService.getFirstRegions();
-  }
+  // @Get('region/1')
+  // async getFirstRegion(): Promise<any> {
+  //   return await this.animalService.getFirstRegions();
+  // }
 }

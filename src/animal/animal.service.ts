@@ -158,6 +158,102 @@ export class AnimalService {
       },
     });
   }
+  
+
+  async analyticsPeriod(period: string) {
+    const killAnalytics = await this.prismaService.animals.groupBy({
+      by: ['orgNm'],
+      where: {
+        AND: [
+          {
+            happenDt: {
+              gte: dayjs(`${period}-01`).toDate(),
+              lte: dayjs(`${period}-01`).endOf('month').toDate(),
+            }
+          },
+          {
+            processStateReason: {
+              in: ['자연사', '안락사']
+            }
+          }
+        ]
+      },
+      _count: {
+        _all: true
+      }
+    });
+
+
+    const adoptionAnalytics = await this.prismaService.animals.groupBy({
+      by: ['orgNm'],
+      where: {
+        AND: [
+          {
+            happenDt: {
+              gte: dayjs(`${period}-01`).toDate(),
+              lte: dayjs(`${period}-01`).endOf('month').toDate(),
+            }
+          },
+          {
+            processStateReason: {
+              in: ['입양']
+            }
+          }
+        ]
+      },
+      _count: {
+        _all: true
+      }
+    });
+
+    const allAnalytics = await this.prismaService.animals.groupBy({
+      by: ['orgNm'],
+      where: {
+        AND: [
+          {
+            happenDt: {
+              gte: dayjs(`${period}-01`).toDate(),
+              lte: dayjs(`${period}-01`).endOf('month').toDate(),
+            }
+          },
+        ]
+      },
+      _count: {
+        _all: true
+      }
+    });
+    
+
+    const processAnalytics = await this.prismaService.animals.groupBy({    
+      by: ['processState', 'processStateReason'],
+      where: {
+        happenDt: {
+          gte: dayjs(`${period}-01`).toDate(),
+          lte: dayjs(`${period}-01`).endOf('month').toDate(),
+        }
+      },
+      _count: {
+        _all: true
+      },
+      orderBy: {
+        processState: 'asc'
+      }
+    });
+
+    return {
+      processAnalytics,
+      killAnalytics,
+      adoptionAnalytics,
+      allAnalytics
+    }
+    // const data = await this.prismaService.animals.findMany({
+    //   where: {
+    //     happenDt: {
+    //       gte: dayjs().subtract(period, 'day').toDate(),
+    //     },
+    //   },
+    // });
+  }
 
   // async getDetailOrg(orgFirst: string) {
   //   return (await this.orgModel.find({ 'org.0': orgFirst }).sort({ 'org.1': 1 })).map((row) => {

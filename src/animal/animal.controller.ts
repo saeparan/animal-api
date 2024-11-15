@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AnimalService } from './animal.service';
+import dayjs from 'dayjs';
 
 @Controller('animal')
 export class AnimalController {
@@ -19,6 +20,11 @@ export class AnimalController {
   @Get('service/:id')
   async findServiceAnimal(@Param() param): Promise<any> {
     return await this.animalService.getServiceAnimal(param.id);
+  }
+
+  @Get('analytics/:period')
+  async analyticsPeriod(@Param() param): Promise<any> {
+    return await this.animalService.analyticsPeriod(param.period ?? dayjs().format('YYYY-MM'));
   }
 
   @Get('latest')

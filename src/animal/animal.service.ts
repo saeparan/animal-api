@@ -76,8 +76,8 @@ export class AnimalService {
         processState: '보호중',
         // processStateReason: '입양',
         happenDt: {
-          gte: dayjs(startDate).toDate(),
-          lte: dayjs(`${endDate}T23:59:59`).toDate(),
+          gte: dayjs(!startDate ? "" : startDate).toDate(),
+          lte: dayjs(`${!endDate ? "" : endDate}T23:59:59`).toDate(),
         },
         // kindCd: type ? { $in: type?.replaceAll(' ', '').split(',') } : { $not: { $eq: '개' } },
         orgNm: orgs ? { in: orgs?.replaceAll(' ', '').split(',') } : {},

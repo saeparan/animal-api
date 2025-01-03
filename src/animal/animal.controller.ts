@@ -42,8 +42,8 @@ export class AnimalController {
   //   return await this.animalService.getShelters();
   // }
 
-  // @Get('region/1')
-  // async getFirstRegion(): Promise<any> {
-  //   return await this.animalService.getFirstRegions();
-  // }
+  @Get('region/1')
+  async getFirstRegion(): Promise<any> {
+    return await this.animalService.getFirstRegions();
+  }
 }

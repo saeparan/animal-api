@@ -100,6 +100,7 @@ export class AnimalService {
     if (query.region1) {
       filter.orgNm = { $in: [query.region1] };
     }
+    console.log(query,2)
 
     return {
       rows: await this.prismaService.animals.findMany({
@@ -292,22 +293,22 @@ export class AnimalService {
     }
   }
 
-  // async getFirstRegions() {
-  //   let data = await this.cacheManager.get('region-first');
-  //   if (data === undefined) {
-  //     data = await this.prisma.region.findMany({
-  //       select: {
-  //         orgCd: true,
-  //         orgdownNm: true,
-  //       },
-  //       where: {
-  //         uprCd: null,
-  //       },
-  //     });
+  async getFirstRegions() {
+    let data = await this.cacheManager.get('region-first');
+    if (data === undefined) {
+      data = await this.prismaService.region.findMany({
+        select: {
+          orgCd: true,
+          orgdownNm: true,
+        },
+        where: {
+          uprCd: null,
+        },
+      });
 
-  //     await this.cacheManager.set('region-first', data, 0);
-  //   }
+      await this.cacheManager.set('region-first', data, 0);
+    }
 
-  //   return data;
-  // }
+    return data;
+  }
 }

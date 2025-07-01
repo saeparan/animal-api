@@ -42,29 +42,17 @@ export class AnimalService {
   private readonly logger = new Logger(AnimalService.name);
 
   async realtime() {
-    const date = dayjs().format('YYYYMMDD');
-    const response = await axios.get(
-      // `https://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?serviceKey=okitWTxaNH50jvdtAqdoq1B77k%2FOm75PvYlVf80ZzGuDty5c8bWic5HJuO%2BTC7MOeXoE%2BVP5Q%2FvBnUzXjHB7ww%3D%3D&bgnde=20240310&endde=20240420&pageNo=1&numOfRows=500&_type=json&upr_cd=6480000&org_cd=5360000`,
-      `https://apis.data.go.kr/1543061/abandonmentPublicSrvc/abandonmentPublic?serviceKey=okitWTxaNH50jvdtAqdoq1B77k%2FOm75PvYlVf80ZzGuDty5c8bWic5HJuO%2BTC7MOeXoE%2BVP5Q%2FvBnUzXjHB7ww%3D%3D&bgnde=${date}&endde=${date}&pageNo=1&numOfRows=500&_type=json`,
-      { responseType: 'json' },
-    );
-
-    let data = response?.data?.response?.body?.items?.item ?? [];
-    data = data.map((r) => {
-      let fileName = r.popfile.split('/');
-      fileName = fileName[fileName.length - 1];
-      fileName = fileName.split('[')[0].replace('.jpg', '') ?? '';
-      r.date = dayjs(fileName);
-      r.dateTime = r.date.unix();
-      r.happenDtFormatted = dayjs(r.happenDt).format('YYYY년 M월 DD일');
-      return { ...r };
+    const data = await this.prismaService.animals.findMany({
+      where: {
+        processState: '보호중',
+        happenDt: {
+          gte: dayjs().startOf('day').toDate(),
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
-
-    data.sort((a, b) => {
-      return b.dateTime - a.dateTime;
-    });
-
-    // data = data.filter((x) => x.processState === '종료(안락사)');
     return data;
   }
 

@@ -13,7 +13,6 @@ export class AnimalController {
 
   @Get('service')
   async findServiceAnimals(@Query() query): Promise<any> {
-    console.log(query);
     return await this.animalService.getServiceAnimals(query);
   }
 
